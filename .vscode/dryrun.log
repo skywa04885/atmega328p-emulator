@@ -1,0 +1,9 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/mnt/72bed47a-5f36-4cb8-bbea-579e82d4ac97/Projects/AVR/emulator'
+ 
+gcc -I./inc -Wall -Werror -O3 -c src/main.c -o src/main.o
+gcc -I./inc -Wall -Werror -O3 -c src/emulator.c -o src/emulator.o
+gcc -I./inc -Wall -Werror -O3 -c src/m328p.c -o src/m328p.o
+gcc  ./src/main.o ./src/emulator.o ./src/m328p.o -o main.elf
+make: Leaving directory '/mnt/72bed47a-5f36-4cb8-bbea-579e82d4ac97/Projects/AVR/emulator'
+ 

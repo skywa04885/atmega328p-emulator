@@ -1,0 +1,431 @@
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 4.3
+# Built for x86_64-redhat-linux-gnu
+# Copyright (C) 1988-2020 Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+
+# Make data base, printed on Thu Sep 30 19:07:13 2021
+
+# Variables
+
+# makefile (from 'Makefile', line 6)
+MAIN_ELF = main.elf
+# environment
+GDK_BACKEND = x11
+# environment
+LC_ALL = C
+# environment
+NO_AT_BRIDGE = 1
+# environment
+SNAP_INSTANCE_KEY = 
+# makefile (from 'Makefile', line 10)
+GCC_C_ARGS = -I./inc -Wall -Werror -O3
+# environment
+STARSHIP_SESSION_KEY = 8103252714831268
+# environment
+GJS_DEBUG_OUTPUT = stderr
+# environment
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-46f17d37-38a3-4523-b19d-3eab436cf446.sock
+# environment
+VSCODE_CWD = /home/lrieff
+# environment
+WINDOWPATH = 2
+# environment
+GDM_LANG = en_US.UTF-8
+# default
+MAKE_COMMAND := make
+# environment
+define BASH_FUNC_which%%
+() {  ( alias;
+ eval ${which_declare} ) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot "$@"
+}
+endef
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# environment
+SNAP_INSTANCE_NAME = code
+# environment
+GDK_PIXBUF_MODULEDIR = /snap/code/75/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# default
+.VARIABLES := 
+# environment
+PWD = /mnt/72bed47a-5f36-4cb8-bbea-579e82d4ac97/Projects/AVR/emulator
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# environment
+HOSTNAME = fedora
+# environment
+MAIL = /var/spool/mail/lrieff
+# environment
+XDG_DATA_DIRS = /home/lrieff/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# environment
+VSCODE_LOG_STACK = false
+# automatic
+%F = $(notdir $%)
+# environment
+VSCODE_CODE_CACHE_PATH = /home/lrieff/.config/Code/CachedData/7f6ab5485bbc008386c4386d08766667e155244e
+# environment
+LANG = C
+# environment
+XAUTHORITY = /run/user/1000/gdm/Xauthority
+# default
+.LOADED := 
+# default
+.INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
+# makefile
+MAKEFLAGS = pqrR
+# makefile
+CURDIR := /mnt/72bed47a-5f36-4cb8-bbea-579e82d4ac97/Projects/AVR/emulator
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# environment
+LESSOPEN = ||/usr/bin/lesspipe.sh %s
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+MFLAGS = -pqrR
+# environment
+SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
+# default
+.SHELLFLAGS := -c
+# environment
+HISTSIZE = 1000
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# environment
+XDG_SESSION_DESKTOP = gnome
+# environment
+VSCODE_CRASH_REPORTER_START_OPTIONS = {"companyName":"Microsoft","productName":"VSCode","submitURL":"appcenter://code?aid=fba07a4d-84bd-4fc8-a125-9640fc8ce171&uid=de728969-48cc-4770-8ba7-0a13473cfdbc&iid=de728969-48cc-4770-8ba7-0a13473cfdbc&sid=de728969-48cc-4770-8ba7-0a13473cfdbc","uploadToServer":true}
+# makefile (from 'Makefile', line 1)
+MAKEFILE_LIST := Makefile
+# environment
+SNAP_REEXEC = 
+# automatic
+@F = $(notdir $@)
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+VSCODE_PID = 3030
+# environment
+XDG_SESSION_TYPE = x11
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# environment
+BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
+# environment
+SESSION_MANAGER = local/unix:@/tmp/.ICE-unix/2256,unix/unix:/tmp/.ICE-unix/2256
+# automatic
+*F = $(notdir $*)
+# environment
+CHROME_DESKTOP = code-url-handler.desktop
+# environment
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+# environment
+BREAKPAD_DUMP_LOCATION = /home/lrieff/.config/Code/exthost Crash Reports
+# default
+MAKE_HOST := x86_64-redhat-linux-gnu
+# makefile
+SHELL = /bin/sh
+# default
+MAKECMDGOALS := all
+# environment
+XMODIFIERS = @im=ibus
+# environment
+DOTNET_BUNDLE_EXTRACT_BASE_DIR = /home/lrieff/.cache/dotnet_bundle_extract
+# environment
+GJS_DEBUG_TOPICS = JS ERROR;JS LOG
+# environment
+SHLVL = 1
+# environment
+MAKELEVEL := 0
+# default
+MAKE = $(MAKE_COMMAND)
+# environment
+SNAP_COOKIE = zwHje5f93wU16R-KZJfkUm0gd2aHaefQMlbIE1vsxMEBGRwSRjTD
+# environment
+PATH = /home/lrieff/.local/bin:/home/lrieff/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/var/lib/snapd/snap/bin:/home/lrieff/.dotnet/tools
+# environment
+MOZ_GMP_PATH = /usr/lib64/mozilla/plugins/gmp-gmpopenh264/system-installed
+# default
+MAKEFILES := 
+# automatic
+^F = $(notdir $^)
+# environment
+SNAP_USER_COMMON = /home/lrieff/snap/code/common
+# environment
+SNAP = /snap/code/75
+# environment
+INVOCATION_ID = 913df9bd5a8e4016a70f6511f530d720
+# environment
+SNAP_REVISION = 75
+# environment
+SNAP_REAL_HOME = /home/lrieff
+# environment
+VSCODE_LOG_NATIVE = false
+# environment
+USERNAME = lrieff
+# automatic
+?F = $(notdir $?)
+# environment
+XDG_CURRENT_DESKTOP = GNOME
+# environment
+KDEDIRS = /usr
+# automatic
++F = $(notdir $+)
+# environment
+DESKTOP_SESSION = gnome
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = GNOME
+# makefile (from 'Makefile', line 4)
+OBJECTS = $(C_SOURCES:.c=.o)
+# 'override' directive
+GNUMAKEFLAGS := 
+# environment
+LOGNAME = lrieff
+# environment
+GIO_LAUNCHED_DESKTOP_FILE = /var/lib/snapd/desktop/applications/code_code.desktop
+# environment
+SNAP_ARCH = amd64
+# makefile
+.DEFAULT_GOAL := all
+# environment
+SYSTEMD_EXEC_PID = 2279
+# environment
+HISTCONTROL = ignoredups
+# environment
+EDITOR = /usr/bin/nano
+# environment
+DISPLAY = :1
+# environment
+USER = lrieff
+# default
+MAKE_VERSION := 4.3
+# 'override' directive
+.SHELLSTATUS := 0
+# environment
+DISABLE_WAYLAND = 1
+# environment
+SNAP_DATA = /var/snap/code/75
+# environment
+SNAP_CONTEXT = zwHje5f93wU16R-KZJfkUm0gd2aHaefQMlbIE1vsxMEBGRwSRjTD
+# environment
+MANAGERPID = 1973
+# environment
+which_declare = declare -f
+# environment
+STARSHIP_SHELL = bash
+# environment
+GIO_LAUNCHED_DESKTOP_FILE_PID = 2989
+# environment
+SSH_AGENT_PID = 2044
+# environment
+_ = /usr/bin/make
+# environment
+XDG_RUNTIME_DIR = /run/user/1000
+# makefile (from 'Makefile', line 1)
+GCC = gcc
+# environment
+GDK_PIXBUF_MODULE_FILE = /home/lrieff/snap/code/common/.cache/gdk-pixbuf-loaders.cache
+# environment
+JOURNAL_STREAM = 8:38273
+# environment
+XDG_SESSION_CLASS = user
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/services/extensions/node/extensionHostProcess
+# environment
+HOME = /home/lrieff
+# environment
+QT_IM_MODULE = ibus
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# environment
+VSCODE_IPC_HOOK = /run/user/1000/vscode-b42e7250-1.60.2-main.sock
+# environment
+SNAP_NAME = code
+# environment
+GSETTINGS_SCHEMA_DIR = /snap/code/75/usr/share/glib-2.0/schemas
+# default
+.RECIPEPREFIX := 
+# automatic
+<F = $(notdir $<)
+# makefile (from 'Makefile', line 3)
+C_SOURCES = $(shell find . -name *.c)
+# environment
+SNAP_VERSION = 7f6ab548
+# default
+SUFFIXES := 
+# environment
+VSCODE_CLI = 1
+# environment
+ELECTRON_NO_ATTACH_CONSOLE = 1
+# environment
+SNAP_COMMON = /var/snap/code/common
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink guile load
+# environment
+SNAP_USER_DATA = /home/lrieff/snap/code/75
+# environment
+XDG_MENU_PREFIX = gnome-
+# environment
+ 
+DOTNET_ROOT = /usr/lib64/dotnet
+# environment
+GDMSESSION = gnome
+# environment
+SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd/void
+# variable set hash-table stats:
+# Load=135/1024=13%, Rehash=0, Collisions=6/190=3%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# src (device 2049, inode 9444372): 5 files, no impossibilities so far.
+# . (device 2049, inode 9444370): 12 files, no impossibilities.
+
+# 17 files, no impossibilities in 2 directories.
+
+# Implicit Rules
+
+%.o: %.c
+#  recipe to execute (from 'Makefile', line 13):
+	$(GCC) $(GCC_C_ARGS) -c $< -o $@
+
+# 1 implicit rules, 0 (0.0%) terminal.
+# Files
+
+# Not a target:
+src/emulator.c:
+#  Implicit rule search has been done.
+#  Last modified 2021-09-30 18:13:50.13928322
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+src/m328p.c:
+#  Implicit rule search has been done.
+#  Last modified 2021-09-30 18:16:26.243890357
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2021-09-30 16:12:06.82345793
+#  File has been updated.
+#  Successfully updated.
+
+clean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 18):
+	rm -rf $(OBJECTS) $(MAIN_ELF)
+
+# Not a target:
+src/main.c:
+#  Implicit rule search has been done.
+#  Last modified 2021-09-30 17:57:32.650235125
+#  File has been updated.
+#  Successfully updated.
+
+src/main.o: src/main.c
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/main'
+#  Last modified 2021-09-30 17:57:34.632242834
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 13):
+	$(GCC) $(GCC_C_ARGS) -c $< -o $@
+
+src/emulator.o: src/emulator.c
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/emulator'
+#  Last modified 2021-09-30 18:14:51.489521818
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 13):
+	$(GCC) $(GCC_C_ARGS) -c $< -o $@
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# 'override' directive
+all: .SHELLSTATUS := 0
+all: src/main.o src/emulator.o src/m328p.o
+#  Command line target.
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: ''
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# automatic
+# @ := all
+# automatic
+# * := 
+# automatic
+# < := src/main.o
+# automatic
+# + := src/main.o src/emulator.o src/m328p.o
+# automatic
+# % := 
+# automatic
+# ^ := src/main.o src/emulator.o src/m328p.o
+# automatic
+# ? := src/main.o src/emulator.o src/m328p.o
+# automatic
+# | := 
+# variable set hash-table stats:
+# Load=9/32=28%, Rehash=0, Collisions=1/20=5%
+#  recipe to execute (from 'Makefile', line 16):
+	$(GCC) $(GCC_LD_ARGS) $(OBJECTS) -o $(MAIN_ELF)
+
+src/m328p.o: src/m328p.c
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'src/m328p'
+#  Last modified 2021-09-30 18:16:38.587938369
+#  File has been updated.
+#  Successfully updated.
+#  recipe to execute (from 'Makefile', line 13):
+	$(GCC) $(GCC_C_ARGS) -c $< -o $@
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# files hash-table stats:
+# Load=11/1024=1%, Rehash=0, Collisions=0/35=0%
+# VPATH Search Paths
+
+# No 'vpath' search paths.
+
+# No general ('VPATH' variable) search path.
+
+# strcache buffers: 1 (0) / strings = 33 / storage = 380 B / avg = 11 B
+# current buf: size = 8162 B / used = 380 B / count = 33 / avg = 11 B
+
+# strcache performance: lookups = 46 / hit rate = 28%
+# hash-table stats:
+# Load=33/8192=0%, Rehash=0, Collisions=0/46=0%
+# Finished Make data base on Thu Sep 30 19:07:13 2021
+
+ 
