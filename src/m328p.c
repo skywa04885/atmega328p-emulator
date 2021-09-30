@@ -10,6 +10,20 @@ m328p_t *m328p_create (void)
     return calloc ((size_t) 1, sizeof (m328p_t));
 }
 
+
+/// Print something with the Atmega328P Prefix.
+void m328p_printf (const m328p_t *m328p, const char *fmt, ...)
+{
+    va_list args;
+    va_start (args, fmt);
+
+    printf ("Atmega328P (%.8lu 0x%.6X): ", m328p->cycles, m328p->program_counter * 2);
+    vprintf (fmt, args);
+    printf ("\n");
+
+    va_end (args);
+}
+
 /// Flashes the given program onto the Atmega328P.
 m328p_err_t m328p_flash (m328p_t *m328p, uint8_t *program, size_t program_size)
 {
@@ -52,7 +66,6 @@ m328p_err_t m328p_run (m328p_t *m328p, size_t cycles)
 m328p_err_t m328p_exec_single_instruction (m328p_t *m328p)
 {
     const uint16_t opcode = ((uint16_t *) m328p->flash)[m328p->program_counter];
-    __M328P_VERBOSE (printf ("Executing PC: 0x%.6X, OP: 0x%.4X\n", m328p->program_counter * 2, opcode));
 
     if (M328P_INSTR_OUT (opcode))
     { // 'OUT'
@@ -84,9 +97,17 @@ m328p_err_t m328p_exec_single_instruction (m328p_t *m328p)
         __m328p_instr_ldi (m328p, opcode);
     }
     else if (M328P_INSTR_CALL (opcode))
-    {
+    { // 'CALL'
         const uint16_t extra = ((uint16_t *) m328p->flash)[m328p->program_counter + 1];
         __m328p_instr_call (m328p, opcode, extra);
+    }
+    else if (M328P_INSTR_SBI (opcode))
+    { // 'SBI'
+        __m328p_instr_sbi (m328p, opcode);
+    }
+    else if (M328P_INSTR_SUBI (opcode))
+    { // 'SUBI'
+        __m328p_instr_subi (m328p, opcode);
     }
     else
     {
@@ -169,7 +190,7 @@ void __m328p_instr_out (m328p_t *m328p, uint16_t opcode)
         | ((opcode & 0b0000011000000000) >> 5)); // Destination Address (I/O Space)
     const uint32_t Rr = ((opcode & 0b0000000111110000) >> 4); // Source Register
 
-    __M328P_VERBOSE (printf ("OUT from R%u to 0x%.02X\n", Rr, A));
+    M328P_VERBOSE_PRINTF_INSTRUCTION (m328p, "OUT", "from R%u to 0x%.02X", Rr, A);
 
     const uint8_t Rr_value = __m328p_read_general_register (m328p, Rr);
     __m328p_write_io_register (m328p, A, Rr_value);
@@ -185,7 +206,7 @@ void __m328p_instr_in (m328p_t *m328p, uint16_t opcode)
         | ((opcode & 0b0000011000000000) >> 9)); // Destination Address (I/O Space)
     const uint32_t Rd = ((opcode & 0b0000000111110000) >> 4); // Destination Register
 
-    __M328P_VERBOSE (printf ("IN from 0x%.02X to R%u\n", A, Rd));
+    M328P_VERBOSE_PRINTF_INSTRUCTION (m328p, "IN", "from 0x%.02X to R%u", A, Rd);
 
     const uint8_t A_value  = __m328p_read_io_register (m328p, A);
     __m328p_write_general_register (m328p, Rd, A_value);
@@ -201,7 +222,7 @@ void __m328p_instr_jmp (m328p_t *m328p, uint16_t opcode, uint16_t extra)
         | ((opcode & 0b0000000111110000) << 5)
         | ((opcode & 0b0000000000000001) << 8); // Constant Address
     
-    __M328P_VERBOSE (printf ("JMP to 0x%.6X\n", k * 2));
+    M328P_VERBOSE_PRINTF_INSTRUCTION (m328p, "JMP", "to 0x%.6X", k * 2);
 
     m328p->program_counter = k;
     m328p->cycles += M328P_INSTR_JMP_CYCLES;
@@ -221,7 +242,7 @@ void __m328p_instr_eor (m328p_t *m328p, uint16_t opcode)
     const uint8_t Rr_value = __m328p_read_general_register (m328p, Rr),
         Rd_value = __m328p_read_general_register (m328p, Rd);
 
-    __M328P_VERBOSE (printf ("EOR R%u and R%u\n", Rr, Rd));
+    M328P_VERBOSE_PRINTF_INSTRUCTION (m328p, "EOR", "R%u and R%u", Rr, Rd);
 
     // Performs the XOR operation.
     const uint8_t res = Rr_value ^ Rd_value;
@@ -262,7 +283,7 @@ void __m328p_instr_add_adc (m328p_t *m328p, uint16_t opcode, bool add_carry)
     const uint8_t Rr_value = __m328p_read_general_register (m328p, Rr), 
         Rd_value = __m328p_read_general_register (m328p, Rd);
 
-    __M328P_VERBOSE (printf ("%s R%u and R%u\n", add_carry ? "ADC" : "ADD", Rr, Rd));
+    M328P_VERBOSE_PRINTF (m328p, "'%s':\tR%u and R%u", add_carry ? "ADC" : "ADD", Rr, Rd);
 
     // If we want to do 'ADC' check for the carry flag in the CPU, and possible set it.
     bool carry_flag = add_carry ? (SREG_value & M328P_SREG_C) : 0;
@@ -335,7 +356,7 @@ void __m328p_instr_ldi (m328p_t *m328p, uint16_t opcode)
     const uint8_t K = (((opcode & 0b0000111100000000) >> 4) | (opcode & 0b0000000000001111));
     const uint8_t Rd = ((opcode & 0b0000000011110000) >> 4) + 16;
 
-    __M328P_VERBOSE (printf ("LDI load value 0x%.02X into R%u\n", K, Rd));
+    M328P_VERBOSE_PRINTF_INSTRUCTION (m328p, "LDI", "load value 0x%.02X into R%u", K, Rd);
 
     // Loads the value into the register.
     __m328p_write_general_register (m328p, Rd, K);
@@ -354,7 +375,7 @@ void __m328p_instr_call (m328p_t *m328p, uint16_t opcode, uint16_t extra)
         | ((opcode & 0b0000000000000001) << 8);
 
     // Prints the verbose stuff.
-    __M328P_VERBOSE (printf ("CALL address 0x%.6X\n", k * 2));
+    M328P_VERBOSE_PRINTF_INSTRUCTION (m328p, "CALL", "address 0x%.6X", k * 2);
     
     // Pushes the current program counter onto the stack.
     __m328p_push_onto_stack (m328p, m328p->program_counter);
@@ -364,4 +385,92 @@ void __m328p_instr_call (m328p_t *m328p, uint16_t opcode, uint16_t extra)
 
     // Adds the clock cycles.
     m328p->cycles += M328P_INSTR_CALL_CYCLES;
+}
+
+/// Executes the 'SBI' instruction.
+void __m328p_instr_sbi (m328p_t *m328p, uint16_t opcode)
+{
+    // Parses the arguments.
+    const uint8_t A = ((opcode & 0b0000000011111000) >> 3);
+    const uint8_t b = (opcode & 0b0000000000000111);
+
+    // Prints the verbose stuff.
+    M328P_VERBOSE_PRINTF_INSTRUCTION (m328p, "SBI", "setting bit %u in 0x%.2X", b, A);
+
+    // Loads the I/O register value.
+    uint8_t A_value = __m328p_read_io_register (m328p, A);
+
+    // Sets the bit in the I/O register.
+    A_value |= _BV8 (b);
+
+    // Writes the new register.
+    __m328p_write_io_register (m328p, A, A_value);
+
+    // Adds the cycles, and increments the program counter.
+    m328p->cycles += M328P_INSTR_SBI_CYCLES;
+    ++m328p->program_counter;   
+}
+
+/// Executes the 'SUBI' instruction.
+void __m328p_instr_subi (m328p_t *m328p, uint16_t opcode)
+{
+    // Parses the argumnets.
+    const uint8_t Rd = ((opcode & 0b0000000011110000) >> 4) + 16;
+    const uint8_t K = (((opcode & 0b0000111100000000) >> 8) | (opcode & 0b0000000000001111));
+
+    // Prints the verbose stuff.
+    M328P_VERBOSE_PRINTF_INSTRUCTION (m328p, "SUBI", "subtracting %u from R%u", K, Rd);
+
+    // Validates arguments.
+    assert (16 <= Rd && Rd <= 31);
+
+    // Loads the value of Rd so we can subtract from it, also loads the value of the SREG
+    //  so we can update it.
+    const uint8_t Rd_value = __m328p_read_general_register (m328p, Rd);
+    uint8_t SREG_value = __m328p_read_sreg (m328p);
+
+    // Clears the SREG values by default, we will set them only if needed.
+    SREG_value &= ~(M328P_SREG_H | M328P_SREG_V | M328P_SREG_N | M328P_SREG_Z | M328P_SREG_C);
+
+    // Performs the subtraction.
+    bool borrow = false;
+    uint8_t res = 0x00;
+    for (uint8_t n = 0; n < 8; ++n)
+    {
+        bool bit_a = Rd_value & _BV8 (7 - n);
+        bool bit_b = K & _BV8 (7 - n);
+
+        // Set H if there was a borrow from bit 3.
+        if (borrow && (7 - n) == 3) SREG_value |= M328P_SREG_H;
+
+        if (borrow)
+        {
+            bit_a = 0;
+            borrow = false;
+        }
+
+        if (!bit_a & bit_b)
+        {
+            res |= _BV8 (7 - n);
+            borrow = true;
+        }
+        else if (bit_a & !bit_b) res |= _BV8 (7 - n);
+    }
+
+    // Set N if MSB of result is set.
+    if (res & _BV8 (7)) SREG_value |= M328P_SREG_N;
+    // Set Z if res == 0.
+    if (res == 0) SREG_value |= M328P_SREG_Z;
+    // Set if absolute value of K is larger than absolute value of Rd.
+    if (_ABS8 (K) > _ABS8 (Rd)) SREG_value |= M328P_SREG_C;
+
+    // Writes the new SREG.
+    __m328p_write_sreg (m328p, SREG_value);
+
+    // Writes the new value of Rd.
+    __m328p_write_general_register (m328p, Rd, res);
+
+    // Adds the cycles, and increments the program counter.
+    m328p->cycles += M328P_INSTR_SUBI_CYCLES;
+    ++m328p->program_counter;   
 }
