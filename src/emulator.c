@@ -76,16 +76,16 @@ emulator_err_t emulator_dump (emulator_t *emulator, FILE *fp)
     fprintf (fp, "-=- Emulator Dump (FaNcY) -=-\n");
 
     const uint8_t sreg_value = __m328p_read_sreg (emulator->m328p);
-    const uint16_t spx_value = __m328p_read_spx (emulator->m328p);
+    const m328p_pointer spx_value = __m328p_read_spx (emulator->m328p);
 
     // Prints the values of the general registers.
     fprintf (fp, "Registers:\n");
-    fprintf (fp, "\tSREG:\t%.6X hex, %.6u dec\n", (unsigned int) sreg_value, (unsigned int) sreg_value);
-    fprintf (fp, "\tSPX:\t%.6X hex, %.6u dec\n", (unsigned int) spx_value, (unsigned int) spx_value);
+    fprintf (fp, "\tSREG:\t0x%.6X, %.6u\n", (unsigned int) sreg_value, (unsigned int) sreg_value);
+    fprintf (fp, "\tSPX:\t0x%.6X, %.6u\n", (unsigned int) spx_value, (unsigned int) spx_value);
     for (uint32_t reg = 0; reg < M328P_GEN_REG_COUNT; ++reg)
     {
         const uint8_t value = __m328p_read_general_register (emulator->m328p, reg);
-        fprintf (fp, "\tR%u:\t%.6x hex, %.6u dec\n", reg, (unsigned int) value, (unsigned int) value);
+        fprintf (fp, "\tR%u:\t0x%.6x, %.6u\n", reg, (unsigned int) value, (unsigned int) value);
     }
 
     return EMULATOR_ERR_OK;

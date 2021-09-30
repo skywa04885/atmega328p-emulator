@@ -55,6 +55,7 @@ q:      Displacement for direct addressing (6-bit)
 
 #define M328P_SRAM_START        ((m328p_pointer) 0x0100)
 #define M328P_SRAM_END          ((m328p_pointer) 0x08FF)
+#define M328P_SRAM_OFFSET(N)    (N)
 
 #define M328P_GEN_REG_COUNT     ((uint32_t) 32)
 #define M328P_GEN_REG_MAX       (M328P_GEN_REG_COUNT - (uint32_t) 1)
@@ -72,6 +73,8 @@ q:      Displacement for direct addressing (6-bit)
 #define M328P_INSTR_ADC(OP)     ((OP & 0b1111110000000000) == 0b0001110000000000)
 #define M328P_INSTR_ADD(OP)     ((OP & 0b1111110000000000) == 0b0000110000000000)
 #define M328P_INSTR_EOR(OP)     ((OP & 0b1111110000000000) == 0b0010010000000000)
+#define M328P_INSTR_LDI(OP)     ((OP & 0b1111000000000000) == 0b1110000000000000)
+#define M328P_INSTR_CALL(OP)    ((OP & 0b1111111000001110) == 0b1001010000001110)
 
 ///////////////////////////////////////////////////////////////////////////
 // Atmega328P Instruction Timing
@@ -80,7 +83,10 @@ q:      Displacement for direct addressing (6-bit)
 #define M328P_INSTR_OUT_CYCLES      1
 #define M328P_INSTR_IN_CYCLES       1
 #define M328P_INSTR_JMP_CYCLES      3
+#define M328P_INSTR_EOR_CYCLES      3
+#define M328P_INSTR_LDI_CYCLES      3
 #define M328P_INSTR_ADC_ADD_CYCLES  1
+#define M328P_INSTR_CALL_CYCLES     4
 
 ///////////////////////////////////////////////////////////////////////////
 // Atmega328P Device Properties
@@ -152,17 +158,43 @@ void __m328p_write_io_register (m328p_t *m328p, uint32_t a, uint8_t value);
 /// Reads from an I/O Register.
 uint8_t __m328p_read_io_register (m328p_t *m328p, uint32_t a);
 
-/// Reads the stack pointer.
-uint16_t __m328p_read_spx (m328p_t *m328p);
+/// Writes to the general SRAM.
+void __m328p_write_sram (m328p_t *m328p, m328p_pointer address, uint8_t value);
+
+/// reads from the general SRAM.
+uint8_t __m328p_read_sram (m328p_t *m328p, m328p_pointer address);
+
+/// Pushes the given value onto the stack.
+void __m328p_push_onto_stack (m328p_t *m328p, uint8_t value);
 
 ///////////////////////////////////////////////////////////////////////////
 // Atmega328P Inline Subroutines
 ///////////////////////////////////////////////////////////////////////////
 
+/// Reads the stack pointer.
+inline m328p_pointer __m328p_read_spx (m328p_t *m328p)
+{
+    return (((m328p_pointer) __m328p_read_io_register (m328p, M328P_SPL_IO_ADDR))
+        | (((m328p_pointer) __m328p_read_io_register (m328p, M328P_SPH_IO_ADDR)) << 8));
+}
+
+/// Writes the stack pointer.
+inline void __m328p_write_spx (m328p_t *m328p, m328p_pointer value)
+{
+    __m328p_write_io_register (m328p, M328P_SPL_IO_ADDR, (uint8_t) (value & 0x0F));
+    __m328p_write_io_register (m328p, M328P_SPH_IO_ADDR, (uint8_t) ((value & 0xF0) >> 8));
+}
+
 /// Reads the SREG.
 inline uint8_t __m328p_read_sreg (m328p_t *m328p)
 {
     return __m328p_read_io_register (m328p, M328P_SREG_IO_ADDR);
+}
+
+/// Writes the SREG.
+inline void __m328p_write_sreg (m328p_t *m328p, uint8_t value)
+{
+    __m328p_write_io_register (m328p, M328P_SREG_IO_ADDR, value);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -179,7 +211,13 @@ void __m328p_instr_in (m328p_t *m328p, uint16_t opcode);
 void __m328p_instr_jmp (m328p_t *m328p, uint16_t opcode, uint16_t extra);
 
 /// Executes the 'EOR' instruction.
-void __m328p_instr_eor ((m328p_t *m328p, uint16_t opcode);
+void __m328p_instr_eor (m328p_t *m328p, uint16_t opcode);
 
 /// Executes the 'ADC' and 'ADD' instruction.
 void __m328p_instr_add_adc (m328p_t *m328p, uint16_t opcode, bool add_cary);
+
+/// Executes the 'LDI' instruction.
+void __m328p_instr_ldi (m328p_t *m328p, uint16_t opcode);
+
+/// Executes the 'CALL' instruction.
+void __m328p_instr_call (m328p_t *m328p, uint16_t opcode, uint16_t extra);
