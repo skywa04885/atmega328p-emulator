@@ -8,6 +8,7 @@ MAIN_ELF		?= main.elf
 GCC_C_ARGS		+= -I./inc
 GCC_C_ARGS		+= -Wall -Werror
 GCC_C_ARGS		+= -O3
+GCC_C_ARGS		+= -D__M328P_DEBUG
 
 %.o: %.c
 	$(GCC) $(GCC_C_ARGS) -c $< -o $@

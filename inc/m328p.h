@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 
 #include "defs.h"
@@ -68,6 +69,9 @@ q:      Displacement for direct addressing (6-bit)
 #define M328P_INSTR_OUT(OP)     ((OP & 0b1111100000000000) == 0b1011100000000000)
 #define M328P_INSTR_IN(OP)      ((OP & 0b1111100000000000) == 0b1011000000000000)
 #define M328P_INSTR_JMP(OP)     ((OP & 0b1111111000001110) == 0b1001010000001100)
+#define M328P_INSTR_ADC(OP)     ((OP & 0b1111110000000000) == 0b0001110000000000)
+#define M328P_INSTR_ADD(OP)     ((OP & 0b1111110000000000) == 0b0000110000000000)
+#define M328P_INSTR_EOR(OP)     ((OP & 0b1111110000000000) == 0b0010010000000000)
 
 ///////////////////////////////////////////////////////////////////////////
 // Atmega328P Instruction Timing
@@ -94,7 +98,7 @@ typedef uint16_t m328p_pointer;
 
 #define M328P_GEN_REG_ADDR(N)   ((m328p_pointer) N)
 #define M328P_RETURN_ERR(N) \
-    fprintf (stderr, "m328p error (" #N ") in file \"%s\" at line %d", __FILE__, __LINE__); \
+    fprintf (stderr, "Atmega328P error (" #N ") in file \"%s\" at line %d\n", __FILE__, __LINE__); \
     return N
 
 typedef struct
@@ -110,10 +114,8 @@ typedef struct
 typedef enum
 {
     M328P_ERR_OK,
-    M328P_ERR_INVALID_OPCODE,
-    M328P_ERR_INVALID_REGISTER,
-    M328P_ERR_INVALID_IO_REGISTER,
-    M328P_ERR_NOMEM
+    M328P_ERR_NOT_ENOUGH_FLASH,
+    M328P_ERR_UNRECOGNIZED_OPCODE
 } m328p_err_t;
 
 ///////////////////////////////////////////////////////////////////////////
@@ -122,6 +124,18 @@ typedef enum
 
 /// Creates an new Atmega328P.
 m328p_t *m328p_create (void);
+
+/// Flashes the given program onto the Atmega328P.
+m328p_err_t m328p_flash (m328p_t *m328p, uint8_t *program, size_t program_size);
+
+/// Reboots the Atmega328P.
+m328p_err_t m328p_reboot (m328p_t *m328p);
+
+/// Runs the Atmega328P for n cycles.
+m328p_err_t m328p_run (m328p_t *m328p, size_t cycles);
+
+/// Executes an single instruction on the Atmega328P.
+m328p_err_t m328p_exec_single_instruction (m328p_t *m328p);
 
 /// Frees the given Atmega328P.
 void m328p_free (m328p_t *m328p);
@@ -156,13 +170,16 @@ inline uint8_t __m328p_read_sreg (m328p_t *m328p)
 ///////////////////////////////////////////////////////////////////////////
 
 /// Executes the 'OUT' instruction.
-m328p_err_t __m328p_instr_out (m328p_t *m328p, uint16_t opcode);
+void __m328p_instr_out (m328p_t *m328p, uint16_t opcode);
 
 /// Executes the 'IN' instruction.
-m328p_err_t __m328p_instr_in (m328p_t *m328p, uint16_t opcode);
+void __m328p_instr_in (m328p_t *m328p, uint16_t opcode);
 
 /// Executes the 'JMP' instruction.
-m328p_err_t __m328p_instr_jmp (m328p_t *m328p, uint16_t opcode, uint16_t extra);
+void __m328p_instr_jmp (m328p_t *m328p, uint16_t opcode, uint16_t extra);
+
+/// Executes the 'EOR' instruction.
+void __m328p_instr_eor ((m328p_t *m328p, uint16_t opcode);
 
 /// Executes the 'ADC' and 'ADD' instruction.
-m328p_err_t __m328p_instr_add_adc (m328p_t *m328p, uint16_t opcode, bool adc);
+void __m328p_instr_add_adc (m328p_t *m328p, uint16_t opcode, bool add_cary);

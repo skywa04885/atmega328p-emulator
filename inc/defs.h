@@ -10,3 +10,9 @@
 #define _BV32(N) __BV(N, uint32_t)
 #define _KB(N) ((uint32_t) (N) * (uint32_t) 1024)
 #define _MB(N) (_KB (n) * (uint32_t) 1024)
+
+#ifdef __M328P_DEBUG
+#define __M328P_VERBOSE(A) A
+#else
+#define __M328P_VERBOSE(A)
+#endif

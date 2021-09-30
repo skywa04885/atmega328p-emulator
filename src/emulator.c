@@ -59,9 +59,14 @@ emulator_err_t emulator_load_bin (emulator_t *emulator, const char *filename)
     return EMULATOR_ERR_OK;
 }
 
-/// Runs n steps in the emulator and returns.
-emulator_err_t emulator_run (emulator_t *emulator, int32_t n)
+/// Flashes the Atmega328P in the emulator.
+emulator_err_t emulator_flash_program (emulator_t *emulator)
 {
+    if (m328p_flash (emulator->m328p, emulator->program, emulator->program_size) != M328P_ERR_OK)
+    {
+        return EMULATOR_ERR_M328P;
+    }
+
     return EMULATOR_ERR_OK;
 }
 

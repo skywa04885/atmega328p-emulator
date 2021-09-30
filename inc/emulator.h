@@ -26,8 +26,8 @@ emulator_t *emulator_create (void);
 /// Loads an binary program into the emulator.
 emulator_err_t emulator_load_bin (emulator_t *emulator, const char *filename);
 
-/// Runs n steps in the emulator and returns.
-emulator_err_t emulator_run (emulator_t *emulator, int32_t n);
+/// Flashes the Atmega328P in the emulator.
+emulator_err_t emulator_flash_program (emulator_t *emulator);
 
 /// Dumps the current emulator state.
 emulator_err_t emulator_dump (emulator_t *emulator, FILE *fp);
